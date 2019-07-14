@@ -1,0 +1,14 @@
+Problem  1
+----------
+Clone a graph using STL unique_ptr/shared_ptr instead of using Raw Pointers
+
+Problem 2
+-----------
+Course schedule with variants
+
+Topological order of taking courses with dependencies
+
+Variant 1: Min semesters needed to complete all the courses
+
+Variant 2: If limit to 'm' courses per semester how many
+

@@ -1,0 +1,51 @@
+//  finding,searching elements
+
+std::search(s.first,s.last,p.first,p.last) -> returns offset of location where substring p matches s .
+
+std::find
+
+
+//Iterators
+
+//distance is useful for converting iterators returned for search/find to
+// correct offsets for further string operations
+
+size_t std::distance(it1,it2) -> returns the distance between two iterators
+
+//next is useful for converting an int offset to an iterator that can be used for 
+//std::find , std::search etc
+
+auto it = std::next(beginIt,size_t offset) -> returns an iterator pointing to distance= offset from begin Iterator
+
+//Tokenizing string
+vector<string> myTokenize(string para)
+    {
+        vector<string> words;
+        std::size_t pos = 0,last = 0;
+        string tokens =  "!?',;.; ";
+        pos = para.find_first_of(tokens,pos);
+        while(pos != std::string::npos)
+        {
+            if(pos > last){
+            string token = para.substr(last,pos-last);
+            //cout << token << "->";
+            words.push_back(token);}
+            last = pos+1;
+            pos = para.find_first_of(tokens,pos+1);  
+        }
+        words.push_back(para.substr(last,para.length()));
+        return words;
+    }
+
+
+//finding mal element in hash map by max value 
+
+using myp = pair<string,int>;
+unordered_map<string,int> strFrequencies {{"hello",3},{"how",10},{"are",8},{"you",3}};
+//lets find the string that occurs most
+auto it = std::max_element(strFrequencies.begin(),strFrequencies.end(),[](const myp &a,const myp &b){return a.second < b.second; });
+cout << it->first;
+
+
+
+

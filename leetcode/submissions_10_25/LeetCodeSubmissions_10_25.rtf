@@ -1,0 +1,778 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid1\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid2\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid101\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid201\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}}
+\margl1440\margr1440\vieww18960\viewh19100\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 461 Hamming Distance\
+\
+class Solution \{\
+public:\
+    int hammingDistance(int x, int y) \{\
+        int count =0;\
+        int res = x ^ y;\
+        //count total '1's in res\
+        while(res)\
+        \{\
+            res = (res & (res-1));\
+            count++;\
+        \}\
+        return count;\
+    \}\
+\};\
+\
+\
+283 Move Zeros\
+\
+class Solution \{\
+public:\
+    void moveZeroes(vector<int>& nums) \{\
+        int wr =0;\
+        int n = nums.size();\
+        for(int rd = 0; rd < n ; rd++)\
+        \{\
+            if(nums[rd])\
+            \{\
+                //its a number\
+                if(wr < rd)\
+                \{\
+                    std::swap(nums[wr],nums[rd]);\
+                \}\
+                wr++;\
+            \}            \
+        \}\
+        \
+    \}\
+\};\
+\
+\
+206 Reverse Linked List\
+\
+\
+/**\
+ * Definition for singly-linked list.\
+ * struct ListNode \{\
+ *     int val;\
+ *     ListNode *next;\
+ *     ListNode(int x) : val(x), next(NULL) \{\}\
+ * \};\
+ */\
+class Solution \{\
+public:\
+    ListNode* reverseList(ListNode* head) \{\
+        return reverseListIterative(head);\
+    \}\
+    \
+    ListNode* reverseListRecursive(ListNode* head) \{\
+        if(head == nullptr) return nullptr;\
+        ListNode *newHead = nullptr;\
+        ListNode *next = head->next;\
+        newHead = reverseList(next);\
+        if(next) next->next = head;\
+        head->next = nullptr;\
+        if(newHead == nullptr) newHead = head;\
+        return newHead; //return the new head\
+    \}\
+    \
+    ListNode* reverseListIterative(ListNode* head)\
+    \{\
+        ListNode *prev = nullptr,*cur =head , *next;\
+        while(cur)\
+        \{\
+            next = cur->next;\
+            cur->next = prev;\
+            prev = cur;\
+            cur = next;\
+        \}\
+        return prev;\
+    \}\
+\};\
+\
+\
+\
+270 Closest Binary Search Tree Value\
+\
+/**\
+ * Definition for a binary tree node.\
+ * struct TreeNode \{\
+ *     int val;\
+ *     TreeNode *left;\
+ *     TreeNode *right;\
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) \{\}\
+ * \};\
+ */\
+class Solution \{\
+public:\
+    int closestValue(TreeNode* root, double target) \{\
+        /*TreeNode * pred = predecessor(root,target);\
+        TreeNode * succ = successor(root,target);\
+        if(pred && succ)\
+        \{\
+            if( target - pred->val < succ->val -target)\
+            \{\
+                return pred->val;\
+            \}\
+            else\
+            \{\
+                return succ->val;\
+            \}\
+        \}\
+        if(pred) return pred->val;\
+        if(succ) return succ->val;*/\
+        if(root) return closetValueHelp(root,target);\
+        return -1;\
+    \}\
+    \
+    //i am chaning approach to use search instead of pred/succ\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8259 	}    int closetValueHelp(TreeNode * root,double target)\
+{\listtext	\uc0\u8259 	}    \{\
+{\listtext	\uc0\u8259 	}        int minVal = root->val;\
+{\listtext	\uc0\u8259 	}        double minDiff = abs(root->val - target);\
+{\listtext	\uc0\u8259 	}        TreeNode *p = root;\
+{\listtext	\uc0\u8259 	}        while(p)\
+{\listtext	\uc0\u8259 	}        \{\
+{\listtext	\uc0\u8259 	}            if(abs(p->val - target) < minDiff)\
+{\listtext	\uc0\u8259 	}            \{\
+{\listtext	\uc0\u8259 	}                //update minVal as we are searching for the value\
+{\listtext	\uc0\u8259 	}                minVal = p->val;\
+{\listtext	\uc0\u8259 	}                minDiff = abs(p->val - target);\
+{\listtext	\uc0\u8259 	}            \}\
+{\listtext	\uc0\u8259 	}            if(target == p->val)\
+{\listtext	\uc0\u8259 	}            \{\
+{\listtext	\uc0\u8259 	}                return p->val;\
+{\listtext	\uc0\u8259 	}            \}\
+{\listtext	\uc0\u8259 	}            if(target < p->val)\
+{\listtext	\uc0\u8259 	}            \{\
+{\listtext	\uc0\u8259 	}                //look in left subtree\
+{\listtext	\uc0\u8259 	}                p = p->left;\
+{\listtext	\uc0\u8259 	}            \}\
+{\listtext	\uc0\u8259 	}            else\
+{\listtext	\uc0\u8259 	}            \{\
+{\listtext	\uc0\u8259 	}                p = p->right;\
+{\listtext	\uc0\u8259 	}            \}\
+{\listtext	\uc0\u8259 	}            \
+{\listtext	\uc0\u8259 	}        \}\
+{\listtext	\uc0\u8259 	}        \
+{\listtext	\uc0\u8259 	}        return minVal;\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}    \}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0     \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls2\ilvl0\cf0 {\listtext	\uc0\u8259 	}    TreeNode * predecessor(TreeNode *p,double target)\
+{\listtext	\uc0\u8259 	}    \{\
+{\listtext	\uc0\u8259 	}        if(p==nullptr) return nullptr;\
+{\listtext	\uc0\u8259 	}        //there are three cases\
+{\listtext	\uc0\u8259 	}        // target is less than current node value\
+{\listtext	\uc0\u8259 	}        if(target < p->val)\
+{\listtext	\uc0\u8259 	}        \{\
+{\listtext	\uc0\u8259 	}            //we have to look in left subtree\
+{\listtext	\uc0\u8259 	}            return predecessor(p->left,target);\
+{\listtext	\uc0\u8259 	}        \}\
+{\listtext	\uc0\u8259 	}        else if(target == p->val)\
+{\listtext	\uc0\u8259 	}        \{       \
+{\listtext	\uc0\u8259 	}            //if it is equal pred is this node\
+{\listtext	\uc0\u8259 	}            return p;\
+{\listtext	\uc0\u8259 	}        \}\
+{\listtext	\uc0\u8259 	}        //target is greater than current node value\
+{\listtext	\uc0\u8259 	}        // is there is lower value than target in right subtree return that\
+{\listtext	\uc0\u8259 	}        //otherwise the pred is this node\
+{\listtext	\uc0\u8259 	}        TreeNode *pred = predecessor(p->right,target);\
+{\listtext	\uc0\u8259 	}        if(pred == nullptr) return p;\
+{\listtext	\uc0\u8259 	}        return pred;        \
+{\listtext	\uc0\u8259 	}    \}\
+{\listtext	\uc0\u8259 	}    \
+{\listtext	\uc0\u8259 	}    TreeNode * successor(TreeNode *p,double target)\
+{\listtext	\uc0\u8259 	}    \{\
+{\listtext	\uc0\u8259 	}        if(p==nullptr) return nullptr;\
+{\listtext	\uc0\u8259 	}        //there are two cases\
+{\listtext	\uc0\u8259 	}        // target is less than current node value\
+{\listtext	\uc0\u8259 	}        if(target < p->val)\
+{\listtext	\uc0\u8259 	}        \{\
+{\listtext	\uc0\u8259 	}            //we have to look in left subtree and if not found return self\
+{\listtext	\uc0\u8259 	}            TreeNode *succ = successor(p->left,target);\
+{\listtext	\uc0\u8259 	}            if(succ) return succ;\
+{\listtext	\uc0\u8259 	}            return p;\
+{\listtext	\uc0\u8259 	}        \}\
+{\listtext	\uc0\u8259 	}       \
+{\listtext	\uc0\u8259 	}        //target is greater than or equal to current node value\
+{\listtext	\uc0\u8259 	}        // look in right subtree\
+{\listtext	\uc0\u8259 	}        return successor(p->right,target);\
+{\listtext	\uc0\u8259 	}      \
+{\listtext	\uc0\u8259 	}    \}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \};\
+\
+\
+\
+20 Valid Parantheses\
+\
+class Solution \{\
+public:\
+    bool isValid(string s) \{\
+        stack<char> st;\
+        unordered_map<char,int> open = \{\{'(',0\},\{'\{',1\},\{'[',2\}\};\
+        unordered_map<char,int> close= \{\{')',0\},\{'\}',1\},\{']',2\}\};;\
+        for(char c:s)\
+        \{\
+            if(open.find(c) != open.end())\
+            \{\
+                //open char must be pushed onto stack\
+                st.push(c);\
+            \}\
+            else\
+            \{\
+                //stack top has mismatch type\
+                if(st.empty()) return false;\
+                char oc = st.top() ;\
+                if(open[oc] != close[c]) return false;\
+                st.pop();\
+            \}\
+        \}\
+        if(st.empty()) return true;\
+        return false;\
+    \}\
+\};\
+\
+\
+168 Excel Sheet Column Title\
+\
+\
+\
+\
+894 All Possible Full Binary Trees\
+\
+/**\
+ * Definition for a binary tree node.\
+ * struct TreeNode \{\
+ *     int val;\
+ *     TreeNode *left;\
+ *     TreeNode *right;\
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) \{\}\
+ * \};\
+ */\
+class Solution \{\
+public:\
+    vector<TreeNode*> allPossibleFBT(int N) \{\
+        return allPossibleFBTHelper(N);\
+    \}\
+    \
+    vector<TreeNode*> allPossibleFBTHelper(int N)\
+    \{\
+        vector<TreeNode*> results;\
+        \
+        if(m_map.find(N) != m_map.end())\
+        \{\
+            //if a BT with size 'N' is already in memoized table return it\
+            return m_map[N];\
+        \}\
+        if(N == 1)\
+        \{\
+            TreeNode  *pNode = new TreeNode(0);\
+            pNode->left = nullptr;\
+            pNode->right = nullptr;\
+            //create and return the 1 node BST\
+            results.push_back(pNode);\
+            m_map[1] = results;\
+            return results;\
+        \}\
+        \
+        //try generating all BT's between i= 1 to N-1\
+        for(int i=2;i<N;i++)\
+        \{\
+        \
+            //generate BT's for left\
+            vector<TreeNode *> leftResults = allPossibleFBTHelper(i-1);\
+            //generate BT's for right\
+            vector<TreeNode *> rightResults = allPossibleFBTHelper(N-i);\
+            for(TreeNode *leftNode:leftResults)\
+            \{\
+                for(TreeNode *rightNode:rightResults)\
+                \{\
+                       TreeNode  *pNode = new TreeNode(0);\
+                       pNode->left = leftNode;\
+                       pNode->right = rightNode;\
+                       results.push_back(pNode);\
+                 \}\
+            \}\
+            \
+        \}\
+        \
+        //memoize trees for this level\
+        m_map[N] = results;\
+        return results;\
+    \}\
+    \
+private:\
+    std::unordered_map<int,vector<TreeNode*>> m_map;\
+\};\
+\
+\
+451 Sort Characters By Frequency\
+\
+class Solution \{\
+public:\
+    \
+    class element\
+    \{\
+        public:\
+        element()\{\};\
+        char c = 0;\
+        int count = 0;\
+    \};\
+    \
+    string frequencySort(string s) \{\
+        vector<element> table\{257\};\
+        string output ;\
+        //store counts of each character\
+        for(char c:s)\
+        \{\
+            table[c].c = c;\
+            table[c].count++;\
+        \}\
+        //sort table\
+        std::sort(table.begin(),table.end(),[](element &a,element &b )\{return a.count > b.count;\});\
+        \
+        //output the characters in sorted order\
+        for_each(table.begin(),table.end(),[ &output](element &elem)\
+                 \{\
+                     //if(elem.count)cout << "char " << elem.c << " appears times : " << elem.count << endl;\
+                     for(int i=0;i<elem.count;i++)\
+                     output.push_back(elem.c); \
+                 \});\
+            \
+        return output;\
+    \}\
+\};\
+\
+\
+156 Binary Tree Upside Down\
+\
+\
+/*\
+Note : Post order traversal of this tree \
+4,5,2,3,1\
+Reconstruct tree in above Order  :\
+\
+*/\
+\
+/**\
+ * Definition for a binary tree node.\
+ * struct TreeNode \{\
+ *     int val;\
+ *     TreeNode *left;\
+ *     TreeNode *right;\
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) \{\}\
+ * \};\
+ */\
+class Solution \{\
+public:\
+    \
+    \
+    TreeNode* upsideDownBinaryTree(TreeNode* root) \{\
+        upsideDownBinaryTreeHelper(root);\
+        return pNewHead;\
+    \}\
+    TreeNode* upsideDownBinaryTreeHelper(TreeNode* root) \{\
+        if(root == nullptr) return root;\
+        //just traverse it in post order and recreate tree bottom up\
+        TreeNode *newl = upsideDownBinaryTreeHelper(root->left);\
+        TreeNode *newr = root->right;\
+        if(newl)\
+        \{\
+            //need to null terminate the left child before linking it in\
+            root->left = root->right = nullptr;\
+            //reconstruct tree in new order desired\
+            newl->left = newr;\
+            newl->right = root;     \
+        \}\
+        if(pNewHead == nullptr) pNewHead = root;\
+        \
+        return root;\
+        \
+    \}\
+    \
+    private:\
+    TreeNode *pNewHead = nullptr;\
+\};\
+\
+\
+173 Binary Search Tree Iterator\
+\
+/**\
+ * Definition for binary tree\
+ * struct TreeNode \{\
+ *     int val;\
+ *     TreeNode *left;\
+ *     TreeNode *right;\
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) \{\}\
+ * \};\
+ */\
+class BSTIterator \{\
+public:\
+    BSTIterator(TreeNode *root): m_pCur(root)\{\
+        \
+    \}\
+\
+    /** @return whether we have a next smallest number */\
+    bool hasNext() \{\
+        if((m_pCur == nullptr) && m_st.empty()) return false;\
+        return true;\
+        \
+    \}\
+\
+    /** @return the next smallest number */\
+    int next() \{\
+        if(!hasNext()) return -1;\
+        //next min elemnt in BST is left most node\
+        while(m_pCur) \
+        \{\
+              m_st.push(m_pCur);\
+              m_pCur = m_pCur->left;\
+         \}\
+        \
+        m_pCur = m_st.top();\
+        m_st.pop();\
+        \
+        //store the next smallest data  \
+        int data = m_pCur->val;\
+        \
+        //go right\
+        m_pCur = m_pCur->right;\
+        //update iterator to point to next smallest element\
+    \
+        \
+        return data;\
+    \}\
+    \
+    private:\
+    stack<TreeNode *> m_st;\
+    TreeNode* m_pCur = nullptr; //store pointer to current node returned last\
+\};\
+\
+/**\
+ * Your BSTIterator will be called like this:\
+ * BSTIterator i = BSTIterator(root);\
+ * while (i.hasNext()) cout << i.next();\
+*/\
+\
+\
+247 Strobogrammatic Number 2\
+\
+class Solution \{\
+public:\
+    vector<string> findStrobogrammatic(int n) \{\
+        vector<string> res = generate(n,n);\
+        return res;\
+    \}\
+    \
+    vector<string> generate(int left,int n )\
+    \{\
+        vector<string> strList;\
+        if(left == 0) \
+        \{\
+            strList.push_back("");\
+            return strList;\
+        \}\
+        if(left == 1) //odd case\
+        \{\
+            strList.push_back("0");\
+            strList.push_back("1");\
+            strList.push_back("8");\
+            return strList;\
+         \}\
+        \
+        //generate all possible strings for next index\
+        vector<string> childlist = generate(left-2,n);\
+        for(string cstr:childlist)\
+        \{\
+            //for each result from next index try all possible chars we can insert at current level\
+            if(left != n)strList.push_back('0' + cstr + '0');\
+            strList.push_back('6' + cstr + '9');\
+            strList.push_back('9' + cstr + '6');\
+            strList.push_back('8' + cstr + '8');\
+            strList.push_back('1' + cstr + '1');\
+        \}\
+        return strList;\
+    \}\
+    \
+    private:\
+    //vector<char> lrlist = ['1','8'];\
+    \
+\};\
+\
+\
+\
+\
+17 Letter Combinations of a phone Number\
+\
+class Solution \{\
+public:\
+    vector<string> letterCombinations(string digits) \{\
+        vector<string> results;\
+        string p;\
+        letterCombinationsHelper(digits,0,p,results);\
+        return results;\
+    \}\
+    \
+    void letterCombinationsHelper(string digits,int i,string &pattern,vector<string> &results)\
+    \{\
+        if(i==digits.size() && pattern.length())\
+        \{\
+            //add a combination\
+            results.push_back(pattern);\
+            return;\
+        \}\
+        \
+        //try all possible characters for current digit;\
+        char c = digits[i];\
+        int cur = atoi(&c);\
+        cout << cur << endl;\
+        for(char c:map[cur])\
+        \{\
+            pattern.push_back(c);\
+            letterCombinationsHelper(digits,i+1,pattern,results);\
+            pattern.pop_back();\
+        \}\
+    \}\
+private:\
+    std::unordered_map<int,vector<char>> map\{\{ 2, \{'a','b','c'\}\},\
+                                             \{ 3, \{'d','e','f'\}\},\
+                                             \{ 4, \{'g','h','i'\}\},\
+                                             \{ 5, \{'j','k','l'\}\},\
+                                             \{ 6, \{'m','n','o'\}\},\
+                                             \{ 7, \{'p','q','r','s'\}\},\
+                                             \{ 8, \{'t','u','v'\}\},\
+                                             \{ 9, \{'w','x','y','z'\}\},\
+                                              \};\
+\};\
+\
+\
+\
+\
+\
+779 Kth Symbol in grammar\
+\
+class Solution \{\
+public:\
+    int kthGrammar(int N, int K) \{\
+        //this->N = N;\
+        //this->K = K;\
+        //pattern = "0";\
+        char c = generateGrammarSymbols(N,K);\
+        return (c == '0') ? 0 :1;\
+    \}\
+    \
+    char flip(char c,bool odd)\
+    \{\
+        switch(c)\
+        \{\
+            case '0':\
+                \{\
+                   if(odd == true) return '0'; else return '1';\
+                \}\
+            case '1':\
+                \{\
+                    if(odd == true) return '1';else return '0';\
+                \}\
+                    \
+        \}\
+        return '0';\
+    \}\
+    \
+    char generateGrammarSymbols(int N,int K)\
+    \{\
+         stack<int> s;\
+         s.push(K);\
+         int j = K;\
+         while(j != 1)\
+         \{\
+             j = (j+1)/2;\
+             s.push(j);\
+         \}\
+         char nextchar = 0;\
+         while(!s.empty())\
+         \{\
+             int i = s.top();\
+             s.pop();\
+             nextchar  = flip(nextchar,(i%2 == 1));             \
+         \}\
+         return nextchar;\
+    \}\
+    \
+    //brute force approach ignore\
+    char generate(int i)\
+    \{\
+        string curpattern;\
+        if(i == N+1)\
+        \{\
+            //cout << pattern;\
+            return pattern[K-1]; //reached end\
+        \}\
+        //continue generating\
+        for(char c:pattern)\
+        \{\
+            //process each char in input string\
+            if(c == '0')\
+            \{\
+                curpattern += "01";\
+            \}\
+            else if(c =='1')\
+            \{\
+                curpattern += "10";\
+            \}\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls3\ilvl0\cf0 {\listtext	\uc0\u8259 	}        \}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0         \
+        pattern = curpattern;\
+        return generate(i+1);\
+    \}\
+private:\
+    string pattern;\
+    int  N;\
+    int  K;\
+\};\
+\
+\
+\
+285 inorder successor in BST\
+\
+/**\
+ * Definition for a binary tree node.\
+ * struct TreeNode \{\
+ *     int val;\
+ *     TreeNode *left;\
+ *     TreeNode *right;\
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) \{\}\
+ * \};\
+ */\
+class Solution \{\
+public:\
+    TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) \{\
+        if(nullptr == root) return nullptr;\
+        if(p->val < root->val)\{ //look for sucessor in left subtree\
+            TreeNode *t = inorderSuccessor(root->left,p);\
+            if(t==nullptr) return root;\
+            return t;\
+        \}\
+    // key is equal to and greater than node case (ignore entire left subtree) \
+    return inorderSuccessor(root->right,p);        \
+    \}\
+\};\
+\
+98 Validate Binary Search Tree\
+\
+/**\
+ * Definition for a binary tree node.\
+ * struct TreeNode \{\
+ *     int val;\
+ *     TreeNode *left;\
+ *     TreeNode *right;\
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) \{\}\
+ * \};\
+ */\
+class Solution \{\
+public:\
+    bool checkBST(TreeNode* root, int &max_val, int &min_val) \{\
+        // if (!root) \{\
+        //     return true;\
+        // \}\
+        if (root && root->left == nullptr && root->right == nullptr) \{\
+            max_val = root->val;\
+            min_val = root->val;\
+            return true;\
+        \}\
+        int max_ = root->val, min_ = root->val;\
+        if (root->left) \{\
+            if (!checkBST(root->left, max_val, min_val) || root->val <= max_val || root->val <= min_val) \{\
+                return false;\
+            \}\
+           // max_ = std::max(max_val, max_);\
+            min_ = std::min(min_val, min_);\
+        \}\
+        if (root->right) \{\
+            if (!checkBST(root->right, max_val, min_val) || root->val >= max_val || root->val >= min_val) \{\
+                return false;\
+            \}\
+            max_ = std::max(max_val, max_);\
+           // min_ = std::min(min_val, min_);\
+        \}\
+\
+        max_val = max_;\
+        min_val = min_;\
+        return true;\
+    \}\
+    \
+    bool isValidBST(TreeNode* root) \{\
+        int max_val, min_val;\
+        if (!root) \{\
+            return true;\
+        \}\
+        return checkBST(root, max_val, min_val);\
+    \}\
+\};\
+\
+15. 3-sum\
+\
+class Solution \{\
+public:\
+    vector<vector<int>> threeSum(vector<int>& nums) \{\
+        vector<vector<int>> results;\
+        std::sort(nums.begin(),nums.end());\
+        //attempt two sum for each element\
+        for(int i=0;i<nums.size();i++)\
+        \{\
+            if(i && nums[i-1] == nums[i]) continue; //skip duplicates\
+            //this element is nums[i] , so we are looking for -nums[i]\
+            twoSum(nums,-nums[i],i,results);           \
+        \}\
+        return results;\
+    \}\
+    \
+    void twoSum(vector<int>& nums,int sum,int Index,vector<vector<int>> &results) \
+    \{\
+        //find all pairs that add up to sum\
+        //only look forward\
+        int lo = Index+1,hi = nums.size() -1;\
+        while(lo < hi)\
+        \{\
+            int tempSum = nums[lo] + nums[hi];\
+            if( tempSum > sum)\
+            \{\
+                hi--;\
+            \}\
+            else if (tempSum < sum)\
+            \{\
+                lo++;\
+            \}\
+            else\
+            \{\
+                vector<int> resVec;\
+                \{\
+                   resVec.push_back(nums[Index]);\
+                   resVec.push_back(nums[lo]);\
+                   resVec.push_back(nums[hi]);\
+                   \
+                   //they add up to sum\
+                   results.push_back(resVec);\
+                    hi--;\
+                    lo++;\
+                    //also skip duplicates involving 1st num\
+                    while(nums[lo] == resVec[1] && lo < hi) lo++;\
+                    //also skip duplicates involving 2nd num\
+                    while(nums[hi] == resVec[2] && lo < hi) hi--;\
+                \}\
+\
+                    \
+            \}\
+        \}\
+    \}\
+\};\
+}
